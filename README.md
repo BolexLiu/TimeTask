@@ -9,7 +9,7 @@ TimeTask内部的实现时基于AlarmManager+广播，在任务与系统api中�
 
 目前应用的场景：
 - 1.电视机顶盒媒体分发
-- 2.android大屏幕广告机
+- 2.android大屏幕广告机任务轮播
 
 ## 使用方法
 
@@ -17,7 +17,7 @@ TimeTask内部的实现时基于AlarmManager+广播，在任务与系统api中�
 1.定义一个Task为你的任务对象，注意基类Task对象已经包含了任务的启动时间和结束时间
 
 ```java
-   static class  MyTask extends Task {
+    class  MyTask extends Task {
         //// TODO: 这里可以放置你自己的资源,务必继承Task对象
         String name;
     }
@@ -56,23 +56,20 @@ TimeTask内部的实现时基于AlarmManager+广播，在任务与系统api中�
 
 4.配置你的任务时间间隔，（启动时间，结束时间）
 ```java
+    private List<MyTask> creatTasks() {
+        return  new ArrayList<MyTask>() {{
+            MyTask BobTask = new MyTask();
+            BobTask.setStarTime(System.currentTimeMillis());   //当前时间
+            BobTask.setEndTime(System.currentTimeMillis()+5*1000);  //5秒后结束
+            BobTask.name="Bob";
+            add(BobTask);
 
-   private List<MyTask> creatTasks() {
-        ArrayList<MyTask> myTasks = new ArrayList<MyTask>() {};
-
-        MyTask myTask1 = new MyTask();
-        myTask1.setStarTime(System.currentTimeMillis());   //当前时间
-        myTask1.setEndTime(System.currentTimeMillis()+5*1000);  //5秒后结束
-        myTask1.name="Bob";
-        myTasks.add(myTask1);
-
-        MyTask myTask2 = new MyTask();
-        myTask2.setStarTime(System.currentTimeMillis()+10*1000); //10秒开始
-        myTask2.setEndTime(System.currentTimeMillis()+15*1000); //15秒后结束
-        myTask2.name="Ben";
-        myTasks.add(myTask2);
-        return myTasks;
-
+            MyTask benTask = new MyTask();
+            benTask.setStarTime(System.currentTimeMillis()+10*1000); //10秒开始
+            benTask.setEndTime(System.currentTimeMillis()+15*1000); //15秒后结束
+            benTask.name="Ben";
+            add(benTask);
+        }};
     }
 ```
 
@@ -84,8 +81,8 @@ TimeTask内部的实现时基于AlarmManager+广播，在任务与系统api中�
 
 ```
 
-这样下来，当调用 myTaskTimeTask.startLooperTask()后，会先打印Bob名称。
-随后10秒后打印Ben。 任务处理器会根据我们配置的启动时间和结束时间进行分发工作。
+这样下来，当调用 myTaskTimeTask.startLooperTask()后，会先分发给timeHandler名称为Bob的任务。
+随后10秒分发Ben名称的任务。 任务处理器会根据我们配置的启动时间和结束时间进行分发工作。
 
 
 完整代码参考app中的列子。

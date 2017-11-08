@@ -51,21 +51,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private List<MyTask> creatTasks() {
-        ArrayList<MyTask> myTasks = new ArrayList<MyTask>() {};
+        return  new ArrayList<MyTask>() {{
+            MyTask BobTask = new MyTask();
+            BobTask.setStarTime(System.currentTimeMillis());   //当前时间
+            BobTask.setEndTime(System.currentTimeMillis()+5*1000);  //5秒后结束
+            BobTask.name="Bob";
+            add(BobTask);
 
-        MyTask myTask1 = new MyTask();
-        myTask1.setStarTime(System.currentTimeMillis());   //当前时间
-        myTask1.setEndTime(System.currentTimeMillis()+5*1000);  //5秒后结束
-        myTask1.name="Bob";
-        myTasks.add(myTask1);
-
-        MyTask myTask2 = new MyTask();
-        myTask2.setStarTime(System.currentTimeMillis()+10*1000); //10秒开始
-        myTask2.setEndTime(System.currentTimeMillis()+15*1000); //15秒后结束
-        myTask2.name="Ben";
-        myTasks.add(myTask2);
-        return myTasks;
-
+            MyTask benTask = new MyTask();
+            benTask.setStarTime(System.currentTimeMillis()+10*1000); //10秒开始
+            benTask.setEndTime(System.currentTimeMillis()+15*1000); //15秒后结束
+            benTask.name="Ben";
+            add(benTask);
+        }};
     }
 
 

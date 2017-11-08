@@ -4,11 +4,7 @@
 
     <application android:allowBackup="true" android:label="@string/app_name"
         android:supportsRtl="true">
-        <receiver android:name=".timed.TimeTask$TimeTaskReceiver" >
-            <intent-filter>
-                <action android:name="com.bolex.timeTask" />
-            </intent-filter>
-        </receiver>
+
     </application>
 
 </manifest>

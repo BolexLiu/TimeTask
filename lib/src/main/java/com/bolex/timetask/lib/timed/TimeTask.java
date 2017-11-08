@@ -5,6 +5,8 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.util.Log;
 
@@ -27,33 +29,27 @@ public class TimeTask<T extends Task> {
     private static PendingIntent mPendingIntent;
     private List<T> mTasks= new ArrayList<T>();
     private  List<T> mTempTasks;
-    private  static TimeTask mTimeLooper;
+
     private  boolean isSpotsTaskIng = false;
     private  int cursor = 0;
     private Context mContext;
+    private final TimeTaskReceiver receiver;
 
-    private TimeTask() {
-
+    public TimeTask(Context mContext) {
+       this.mContext=mContext;
+        receiver = new TimeTaskReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("com.bolex.timeTask");
+        mContext.registerReceiver(receiver, filter);
     }
 
-    public static TimeTask getInstance(Context mContext) {
-        if (mTimeLooper == null) {
-            synchronized (TimeTask.class) {
-                if (mTimeLooper == null) {
-                    mTimeLooper = new TimeTask();
-                    mTimeLooper.mContext=mContext;
-                }
-            }
-        }
-        return mTimeLooper;
-    }
 
     public void setTasks(List<T> mES) {
         cursorInit();
         if (mTempTasks !=null){
             mTempTasks = mES;
         }else {
-            mTimeLooper.mTasks = mES;
+            this.mTasks = mES;
         }
     }
 
@@ -69,9 +65,9 @@ public class TimeTask<T extends Task> {
      * @param mTH
      * @return
      */
-    public TimeTask addHandlerMedia(TimeHandler mTH) {
+    public TimeTask addHandler(TimeHandler<T> mTH) {
         mTimeHandlers.add(mTH);
-        return mTimeLooper;
+        return this;
     }
 
     /**
@@ -198,15 +194,20 @@ public class TimeTask<T extends Task> {
         }
     }
 
+    public void onColse(){
+        mContext.unregisterReceiver(receiver);
+    }
 
-    public static class TimeTaskReceiver extends BroadcastReceiver {
+    public  class TimeTaskReceiver extends BroadcastReceiver {
+
+
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (mTimeLooper != null) {
-                mTimeLooper.startLooperTask(); //预约下一个
-            }
+            TimeTask.this.startLooperTask(); //预约下一个
         }
     }
+
+
 
 
 }

@@ -26,7 +26,7 @@ TimeTask内部的实现时基于AlarmManager+广播，在任务与系统api中�
 
 ```	
 dependencies {
-    compile 'com.github.BolexLiu:TimeTask:1.0'
+    compile 'com.github.BolexLiu:TimeTask:1.1'
 }
 
 ```
@@ -49,18 +49,18 @@ dependencies {
    TimeHandler<MyTask> timeHandler = new TimeHandler<MyTask>() {
         @Override
         public void exeTask(MyTask mTask) {
-               //到点执行
+               //准时执行
               // 一般来说，在exeTask方法中处理你的逻辑就好可以，过期和未来的都不需要关注 
         }
 
         @Override
         public void overdueTask(MyTask mTask) {
-                 //过期执行
+                 ///已过期的任务
         }
 
         @Override
         public void futureTask(MyTask mTask) {
-              //未来将要执行
+              //未来将要执行的任务
         }
     };
 
@@ -69,7 +69,7 @@ dependencies {
 3.定义一个任务分发器，并添加接收器
 ```java
  
-        TimeTask<MyTask> myTaskTimeTask = new TimeTask<>(MainActivity.this); // 创建一个任务处理器
+        TimeTask<MyTask> myTaskTimeTask = new TimeTask<>(MainActivity.this,ACTION); // 创建一个任务处理器
         myTaskTimeTask.addHandler(timeHandler); //添加时间回掉
 ```
 
@@ -79,16 +79,17 @@ dependencies {
     private List<MyTask> creatTasks() {
         return  new ArrayList<MyTask>() {{
             MyTask BobTask = new MyTask();
-            BobTask.setStarTime(System.currentTimeMillis());   //当前时间
-            BobTask.setEndTime(System.currentTimeMillis()+5*1000);  //5秒后结束
-            BobTask.name="Bob";
-            add(BobTask);
+                        //******测试demo请务必修改时间******
+                      BobTask.setStarTime(dataOne("2017-11-08 21:57:00"));   //当前时间
+                      BobTask.setEndTime(dataOne("2017-11-08 21:57:05"));  //5秒后结束
+                      BobTask.name="Bob";
+                      add(BobTask);
 
-            MyTask benTask = new MyTask();
-            benTask.setStarTime(System.currentTimeMillis()+10*1000); //10秒开始
-            benTask.setEndTime(System.currentTimeMillis()+15*1000); //15秒后结束
-            benTask.name="Ben";
-            add(benTask);
+                      MyTask benTask = new MyTask();
+                      benTask.setStarTime(dataOne("2017-11-08 21:57:10")); //10秒开始
+                      benTask.setEndTime(dataOne("2017-11-08 21:57:15")); //15秒后结束
+                      benTask.name="Ben";
+                      add(benTask);
         }};
     }
 ```
@@ -113,7 +114,7 @@ dependencies {
 
 
 **TimeTask**
-- TimeTask(Context mContext);//初始化
+- TimeTask(Context mContext,String actionName);//初始化
 - setTasks(List<T> mES);//设置任务列表
 - addHandler(TimeHandler<T> mTH);//添加任务监听器
 - startLooperTask();//启动任务
@@ -127,6 +128,7 @@ dependencies {
 
 - 1.务必确保你的任务队列中的任务时已经按照时间排序的。
 - 2.务必使用泛型继承Task任务。
+- 3.如果你需要用到多组TimeTask，要保证actionName不要重复，就是自己给取一个名字。
 
 
 原理底层解析后续出文章。

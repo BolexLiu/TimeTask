@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     TimeHandler<MyTask> timeHandler = new TimeHandler<MyTask>() {
         @Override
         public void exeTask(MyTask mTask) {
-            Log.d("Task",mTask.name);
+            Log.d("Task", mTask.name);
 
         }
 
@@ -32,14 +32,15 @@ public class MainActivity extends AppCompatActivity {
 
         }
     };
-    final String ACTION ="timeTask.action";
+    final String ACTION = "timeTask.action";
+    private TimeTask<MyTask> myTaskTimeTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // TODO: 2017/11/8  创建一个任务处理器
-        TimeTask<MyTask> myTaskTimeTask = new TimeTask<>(MainActivity.this,ACTION);
+        myTaskTimeTask = new TimeTask<>(MainActivity.this, ACTION);
 
         // TODO: 2017/11/8   添加时间回掉
         myTaskTimeTask.addHandler(timeHandler);
@@ -54,23 +55,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private List<MyTask> creatTasks() {
-        return  new ArrayList<MyTask>() {{
+        return new ArrayList<MyTask>() {{
             MyTask BobTask = new MyTask();
             BobTask.setStarTime(dataOne("2017-11-08 21:57:00"));   //当前时间
             BobTask.setEndTime(dataOne("2017-11-08 21:57:05"));  //5秒后结束
-            BobTask.name="Bob";
+            BobTask.name = "Bob";
             add(BobTask);
 
             MyTask benTask = new MyTask();
             benTask.setStarTime(dataOne("2017-11-08 21:57:10")); //10秒开始
             benTask.setEndTime(dataOne("2017-11-08 21:57:15")); //15秒后结束
-            benTask.name="Ben";
+            benTask.name = "Ben";
             add(benTask);
         }};
     }
 
 
-    static class  MyTask extends Task {
+    static class MyTask extends Task {
         //// TODO: 2017/11/8 这里可以放置你自己的资源,务必继承Task对象
         String name;
 
@@ -88,10 +89,12 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return Long.parseLong(times)*1000;
+        return Long.parseLong(times) * 1000;
     }
 
-
-
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        myTaskTimeTask.onColse();
+    }
 }

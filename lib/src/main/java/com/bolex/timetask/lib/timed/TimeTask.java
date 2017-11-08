@@ -29,22 +29,27 @@ public class TimeTask<T extends Task> {
     private static PendingIntent mPendingIntent;
     private List<T> mTasks= new ArrayList<T>();
     private  List<T> mTempTasks;
-    String mActinName;
+    String mActionName;
     private  boolean isSpotsTaskIng = false;
     private  int cursor = 0;
     private Context mContext;
     private TimeTaskReceiver receiver;
 
-    public TimeTask(Context mContext,@NonNull String actinName) {
+    /**
+     *
+     * @param mContext
+     * @param actionName action不要重复
+     */
+    public TimeTask(Context mContext,@NonNull String actionName) {
        this.mContext=mContext;
-       this.mActinName=actinName;
+       this.mActionName=actionName;
         initBreceiver(mContext);
     }
 
     private void initBreceiver(Context mContext) {
         receiver = new TimeTaskReceiver();
         IntentFilter filter = new IntentFilter();
-        filter.addAction(mActinName);
+        filter.addAction(mActionName);
         mContext.registerReceiver(receiver, filter);
     }
 
@@ -156,7 +161,7 @@ public class TimeTask<T extends Task> {
         if (mPendingIntent == null) {
             int requestCode = 0;
             Intent intent = new Intent();
-            intent.setAction(mActinName);
+            intent.setAction(mActionName);
             mPendingIntent = PendingIntent.getBroadcast(mContext, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
         return mPendingIntent;

@@ -122,7 +122,7 @@ dependencies {
 - spotsTask(List<T> mSpotsTask);//插播任务
 - onColse();//关闭 防止内存泄漏
 
-代码中已有详细注释,看原理读代码最好了。
+代码中已有详细注释,代码不是很复杂看原理读最好了。
 
 ## 注意:
 

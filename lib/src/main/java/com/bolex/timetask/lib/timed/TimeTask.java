@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.ConnectivityManager;
 import android.os.Build;
 import android.util.Log;
 
@@ -119,7 +118,7 @@ public class TimeTask<T extends Task> {
     /**
      * 停止任务
      */
-    public void StopLooper() {
+    public void stopLooper() {
         cancelAlarmManager();
     }
 
@@ -196,6 +195,7 @@ public class TimeTask<T extends Task> {
 
     public void onColse(){
         mContext.unregisterReceiver(receiver);
+        mContext=null;
     }
 
     public  class TimeTaskReceiver extends BroadcastReceiver {

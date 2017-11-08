@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 
@@ -28,17 +29,22 @@ public class TimeTask<T extends Task> {
     private static PendingIntent mPendingIntent;
     private List<T> mTasks= new ArrayList<T>();
     private  List<T> mTempTasks;
-
+    String mActinName;
     private  boolean isSpotsTaskIng = false;
     private  int cursor = 0;
     private Context mContext;
-    private final TimeTaskReceiver receiver;
+    private TimeTaskReceiver receiver;
 
-    public TimeTask(Context mContext) {
+    public TimeTask(Context mContext,@NonNull String actinName) {
        this.mContext=mContext;
+       this.mActinName=actinName;
+        initBreceiver(mContext);
+    }
+
+    private void initBreceiver(Context mContext) {
         receiver = new TimeTaskReceiver();
         IntentFilter filter = new IntentFilter();
-        filter.addAction("com.bolex.timeTask");
+        filter.addAction(mActinName);
         mContext.registerReceiver(receiver, filter);
     }
 
@@ -150,7 +156,7 @@ public class TimeTask<T extends Task> {
         if (mPendingIntent == null) {
             int requestCode = 0;
             Intent intent = new Intent();
-            intent.setAction("com.bolex.timeTask");
+            intent.setAction(mActinName);
             mPendingIntent = PendingIntent.getBroadcast(mContext, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
         return mPendingIntent;

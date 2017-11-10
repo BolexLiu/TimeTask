@@ -131,5 +131,5 @@ dependencies {
 - 3.如果你需要用到多组TimeTask，要保证actionName不要重复，就是自己给取一个名字。
 
 
-原理解析地址：![动手写Android内的计划任务定时框架](http://dajipai.cc/archives/a9dda310.html)
+原理解析地址：[动手写Android内的计划任务定时框架](http://dajipai.cc/archives/a9dda310.html)
 
